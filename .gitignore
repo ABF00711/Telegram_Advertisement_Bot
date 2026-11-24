@@ -4,6 +4,7 @@ __pycache__/
 *.pyc
 *.session
 *.session-journal
+*.session.api_id
 logs/
 data/*.db
 data/media/
