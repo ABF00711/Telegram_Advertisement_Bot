@@ -185,7 +185,12 @@ async def channels_handler(message: Message, state: FSMContext):
         return
 
     if not channels:
-        await message.answer("No broadcast channels found.")
+        account = user_client.account_name or "the signed-in account"
+        await message.answer(
+            f"No broadcast channels found for {account}.\n"
+            "Archived channels are included. Groups are not.\n"
+            "The channels must be in this personal account's chat list."
+        )
         return
 
     postable = [channel for channel in channels if channel["can_post"]]

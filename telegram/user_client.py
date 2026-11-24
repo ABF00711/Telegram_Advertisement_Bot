@@ -259,24 +259,41 @@ async def connect_user_account():
 async def get_authorized_channels():
     current = get_client()
     channels = []
+    seen: set[int] = set()
+    dialogs = 0
+    groups = 0
 
-    async for dialog in current.iter_dialogs():
-        entity = dialog.entity
-        if not isinstance(entity, Channel) or not entity.broadcast:
-            continue
+    for archived in (False, True):
+        async for dialog in current.iter_dialogs(archived=archived):
+            dialogs += 1
+            entity = dialog.entity
+            if not isinstance(entity, Channel):
+                continue
+            # if entity.megagroup or not entity.broadcast:
+            #     groups += 1
+            #     continue
+            if entity.id in seen:
+                continue
+            seen.add(entity.id)
 
-        admin_rights = entity.admin_rights
-        can_post = entity.creator or (
-            admin_rights is not None and admin_rights.post_messages
-        )
-        channels.append(
-            {
-                "id": entity.id,
-                "access_hash": entity.access_hash or 0,
-                "title": entity.title,
-                "username": entity.username,
-                "can_post": bool(can_post),
-            }
-        )
+            admin_rights = entity.admin_rights
+            can_post = entity.creator or (
+                admin_rights is not None and admin_rights.post_messages
+            )
+            channels.append(
+                {
+                    "id": entity.id,
+                    "access_hash": entity.access_hash or 0,
+                    "title": entity.title,
+                    "username": entity.username,
+                    "can_post": bool(can_post),
+                }
+            )
 
-    return channels
+    logger.info(
+        "Checked %s chats, found %s broadcast channels, skipped %s groups",
+        dialogs,
+        len(channels),
+        groups,
+    )
+    return channels, {"dialogs": dialogs, "groups": groups}

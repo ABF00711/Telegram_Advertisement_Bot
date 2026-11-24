@@ -10,7 +10,7 @@ logger = logging.getLogger(__name__)
 
 
 async def sync_channels() -> dict:
-    found = await get_authorized_channels()
+    found, stats = await get_authorized_channels()
 
     async with session_scope() as session:
         existing = {
@@ -38,5 +38,16 @@ async def sync_channels() -> dict:
                 row.synced_at = utcnow()
 
     postable = sum(1 for item in found if item["can_post"])
-    logger.info("Synced %s channels, %s can post", len(found), postable)
-    return {"total": len(found), "postable": postable}
+    logger.info(
+        "Synced %s channels, %s can post, %s chats, %s groups",
+        len(found),
+        postable,
+        stats["dialogs"],
+        stats["groups"],
+    )
+    return {
+        "total": len(found),
+        "postable": postable,
+        "dialogs": stats["dialogs"],
+        "groups": stats["groups"],
+    }
