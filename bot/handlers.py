@@ -193,18 +193,15 @@ async def channels_handler(message: Message, state: FSMContext):
         )
         return
 
-    postable = [channel for channel in channels if channel["can_post"]]
     lines = [
         "Channel overview",
         "",
         f"Total channels: {len(channels)}",
-        f"Can publish: {len(postable)}",
         "",
     ]
     for channel in channels:
         username = f"@{channel['username']}" if channel["username"] else "Private channel"
-        permission = "Can publish" if channel["can_post"] else "No permission"
-        lines.append(f"{channel['title']}\n{username}\n{permission}")
+        lines.append(f"{channel['title']}\n{username}")
         lines.append("")
     await send_blocks(message, "\n".join(lines).strip())
 

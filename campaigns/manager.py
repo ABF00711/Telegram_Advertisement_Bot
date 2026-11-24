@@ -132,7 +132,8 @@ async def list_channels() -> list[dict]:
 
 async def list_postable_channels() -> list[dict]:
     channels = await list_channels()
-    return [channel for channel in channels if channel["can_post"]]
+    # return [channel for channel in channels if channel["can_post"]]
+    return channels
 
 
 async def create_schedule(

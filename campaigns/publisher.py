@@ -104,8 +104,8 @@ async def _send_one(
 ) -> PublishResult:
     client = get_client()
     title = channel["title"] or "Untitled"
-    if not channel["can_post"]:
-        return PublishResult(title, False, "No permission to post.")
+    # if not channel["can_post"]:
+    #     return PublishResult(title, False, "No permission to post.")
     if not client.is_connected():
         return PublishResult(title, False, "Personal account is not connected.")
 
