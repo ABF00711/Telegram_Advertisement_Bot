@@ -219,7 +219,7 @@ async def status_handler(message: Message, state: FSMContext):
         "",
         "Management bot: running",
         f"Personal account: {account}",
-        f"Channels you can post to: {info['postable']} of {info['channels']}",
+        f"Channels you can post to: {info['channels']}",
         f"Advertisements: {info['ads']}",
         f"Active schedules: {info['active']}",
     ]
