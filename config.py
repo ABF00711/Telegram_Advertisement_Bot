@@ -29,7 +29,7 @@ ADMIN_USER_ID = int(ADMIN_USER_ID)
 # Keeps the session that is already signed in.
 SESSION_NAME = os.getenv("SESSION_NAME", str(SESSION_DIR / "personal_user"))
 
-TIMEZONE = os.getenv("TIMEZONE", "Asia/Tokyo")
+TIMEZONE = os.getenv("TIMEZONE", "GMT")
 try:
     LOCAL_TZ = ZoneInfo(TIMEZONE)
 except Exception as exc:
